@@ -25,7 +25,7 @@ public class CommandLine {
         String input;
         BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
-            System.out.print(":>");
+            System.out.print("AndySh:~$ ");
             try {
                 input = console.readLine();
             } catch (IOException e) {
@@ -69,7 +69,7 @@ public class CommandLine {
                     try {
                         return SystemProcess.buildProcess(commands);
                     } catch (IOException e) {
-                        System.out.println("ERROR: System Process Failed.");
+                        System.out.println("ERROR: Invalid Command.");
                         return null;
                     }
                 }
@@ -88,10 +88,12 @@ public class CommandLine {
             System.out.println("No Arguments for History Command Allowed");
             return null;
         } else {
+            System.out.println();
             for (int i=0; i < count; i++) {
                 Pair<String, List<String>> pair = history.get(i);
-                System.out.println(pair.getKey());
+                System.out.println(i + " " + pair.getKey());
             }
+            System.out.println();
             return args;
         }
     }

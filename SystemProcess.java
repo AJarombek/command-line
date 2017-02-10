@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,12 +12,7 @@ public class SystemProcess {
 
     public static List<String> buildProcess(List<String> args) throws IOException {
 
-        List<String> commands = new ArrayList<>();
-        commands.add("Notepad.exe");
-        commands.add("/P");
-        commands.add("hello");
-
-        ProcessBuilder pb = new ProcessBuilder(commands);
+        ProcessBuilder pb = new ProcessBuilder(args);
         java.lang.Process process = pb.start();
         InputStream is = process.getInputStream();
         InputStreamReader isr = new InputStreamReader(is);
