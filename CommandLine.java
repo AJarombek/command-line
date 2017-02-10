@@ -13,10 +13,12 @@ public class CommandLine {
 
     private Map<Integer, Pair<String, List<String>>> history;
     private int count;
+    private String directory;
 
     public CommandLine() {
         history = new HashMap<>();
         count = 0;
+        directory = System.getProperty("user.dir");
     }
 
     public void runCMD() {
@@ -25,7 +27,7 @@ public class CommandLine {
         String input;
         BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
-            System.out.print("AndySh:~$ ");
+            System.out.print("AndySh " + directory + "$ ");
             try {
                 input = console.readLine();
             } catch (IOException e) {
@@ -35,6 +37,11 @@ public class CommandLine {
 
             if (input.equals("")) {
                 continue;
+            }
+
+            if (input.equals("exit")) {
+                System.out.println("Goodbye!");
+                break;
             }
 
             // First get all the commands in list form
@@ -57,7 +64,13 @@ public class CommandLine {
             case "help":
                 return helpCommand(commands);
             case "cd":
-                return null;
+                String newPath = DirectoryProcess.changeDirectory(commands, directory);
+                if (newPath == null) {
+                    return null;
+                } else {
+                    directory = newPath;
+                    return commands;
+                }
             case "history":
                 return displayHistoryCommand(commands);
             case "!!":
@@ -67,7 +80,7 @@ public class CommandLine {
                     return historyCommand(commands);
                 } else {
                     try {
-                        return SystemProcess.buildProcess(commands);
+                        return SystemProcess.buildProcess(commands, directory);
                     } catch (IOException e) {
                         System.out.println("ERROR: Invalid Command.");
                         return null;
@@ -104,9 +117,23 @@ public class CommandLine {
             return null;
         } else {
             String command = args.get(0);
-            int commandNum = Integer.parseInt(command.substring(1));
-            Pair<String, List<String>> pair = history.get(commandNum);
-            return execute(pair.getValue());
+
+            // Only try to find the history index if the command is an integer
+            if (command.substring(1).matches("\\d+")) {
+                int commandNum = Integer.parseInt(command.substring(1));
+
+                // Make sure the index points to a valid history pair
+                if (commandNum > count - 1) {
+                    System.out.println("Illegal Index !<index> Entered");
+                    return null;
+                }
+
+                Pair<String, List<String>> pair = history.get(commandNum);
+                return execute(pair.getValue());
+            } else {
+                System.out.println("Illegal String Index !<index> Entered");
+                return null;
+            }
         }
     }
 
@@ -115,7 +142,14 @@ public class CommandLine {
             System.out.println("No Arguments for Help Command Allowed");
             return null;
         } else {
-            System.out.println("Help Screen");
+            System.out.println("\nCOMMANDS");
+            System.out.println("\nhistory - Display the full command history.");
+            System.out.println("\n!! - Execute the previous valid command.");
+            System.out.println("!<index> - Execute a previous command by its historical index.");
+            System.out.println("\ncd {path} - Change directories with a designated path.");
+            System.out.println("\nexit - Leave the command line.");
+            System.out.println("Any other command will be executed as a system process.\n");
+
             return args;
         }
     }
