@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class SystemProcess {
 
-    public static String buildProcess(String arg) throws IOException {
+    public static List<String> buildProcess(List<String> args) throws IOException {
 
         List<String> commands = new ArrayList<>();
         commands.add("Notepad.exe");
@@ -30,6 +30,6 @@ public class SystemProcess {
         }
         br.close();
 
-        return line;
+        return args;
     }
 }
