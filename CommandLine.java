@@ -71,6 +71,21 @@ public class CommandLine {
                     directory = newPath;
                     return commands;
                 }
+            case "cd..":
+                if (commands.size() > 1) {
+                    System.out.println("ERROR: No Arguments allowed with cd.. command");
+                    return null;
+                } else {
+                    String backPath = DirectoryProcess.backDirectory(directory);
+
+                    if (backPath == null) {
+                        System.out.println("ERROR: No Directory to move back to");
+                        return null;
+                    }
+
+                    directory = backPath;
+                    return commands;
+                }
             case "history":
                 return displayHistoryCommand(commands);
             case "!!":
@@ -147,6 +162,7 @@ public class CommandLine {
             System.out.println("\n!! - Execute the previous valid command.");
             System.out.println("!<index> - Execute a previous command by its historical index.");
             System.out.println("\ncd {path} - Change directories with a designated path.");
+            System.out.println("cd.. - Move to parent directory.");
             System.out.println("\nexit - Leave the command line.");
             System.out.println("Any other command will be executed as a system process.\n");
 

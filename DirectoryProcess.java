@@ -27,4 +27,13 @@ public class DirectoryProcess {
     private static boolean validDirectory(String path, String currentPath) {
         return (Files.isDirectory(Paths.get(currentPath + path)));
     }
+
+    public static String backDirectory(String path) {
+        for (int i = path.length()-1; i >= 0; i--) {
+            if (path.charAt(i) == '\\') {
+                return path.substring(0, i);
+            }
+        }
+        return null;
+    }
 }
