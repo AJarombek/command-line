@@ -7,6 +7,13 @@ import java.util.List;
  */
 public class SystemProcess {
 
+    /**
+     * Function for the default build system process command
+     * @param args the command line arguments
+     * @param directory the current directory path
+     * @return the command line arguments
+     * @throws IOException
+     */
     public static List<String> buildProcess(List<String> args, String directory) throws IOException {
 
         ProcessBuilder pb = new ProcessBuilder(args);

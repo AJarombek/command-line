@@ -21,6 +21,9 @@ public class CommandLine {
         directory = System.getProperty("user.dir");
     }
 
+    /**
+     * The main method for starting a command line
+     */
     public void runCMD() {
         System.out.println("Andy Shell 1.0 \nType 'help' for more information");
 
@@ -57,6 +60,11 @@ public class CommandLine {
         }
     }
 
+    /**
+     * Method for executing a command from the command line
+     * @param commands a list of the entered commands
+     * @return the commands list if the command was valid, null otherwise
+     */
     private List<String> execute(List<String> commands) {
         String mainCommand = commands.get(0);
 
@@ -66,6 +74,7 @@ public class CommandLine {
             case "cd":
                 String newPath = DirectoryProcess.changeDirectory(commands, directory);
                 if (newPath == null) {
+                    System.out.println("ERROR: Invalid Directory Entered");
                     return null;
                 } else {
                     directory = newPath;
@@ -89,7 +98,12 @@ public class CommandLine {
             case "history":
                 return displayHistoryCommand(commands);
             case "!!":
-                return execute(history.get(count-1).getValue());
+                if (count >= 1)
+                    return execute(history.get(count-1).getValue());
+                else {
+                    System.out.println("ERROR: The history is empty");
+                    return null;
+                }
             default:
                 if (mainCommand.charAt(0) == '!') {
                     return historyCommand(commands);
@@ -104,6 +118,11 @@ public class CommandLine {
         }
     }
 
+    /**
+     * Helper method to get the commands in list form
+     * @param input the command line input String
+     * @return the list of commands
+     */
     private List<String> getCommands(String input) {
         List<String> commands = new ArrayList<>();
         String[] words = input.split(" ");
@@ -111,6 +130,11 @@ public class CommandLine {
         return commands;
     }
 
+    /**
+     * Method for the history command
+     * @param args the command line arguments
+     * @return the commands list if the command was valid, null otherwise
+     */
     private List<String> displayHistoryCommand(List<String> args) {
         if (args.size() > 1) {
             System.out.println("No Arguments for History Command Allowed");
@@ -126,6 +150,11 @@ public class CommandLine {
         }
     }
 
+    /**
+     * Method for the !<integer value> command
+     * @param args the command line arguments
+     * @return the commands list if the command was valid, null otherwise
+     */
     private List<String> historyCommand(List<String> args) {
         if (args.size() > 1) {
             System.out.println("No Arguments for !<integer value> Command Allowed");
@@ -152,6 +181,11 @@ public class CommandLine {
         }
     }
 
+    /**
+     * Method for the help command
+     * @param args the command line arguments
+     * @return the commands list if the command was valid, null otherwise
+     */
     private List<String> helpCommand(List<String> args) {
         if (args.size() > 1) {
             System.out.println("No Arguments for Help Command Allowed");
